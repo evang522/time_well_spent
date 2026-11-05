@@ -3,10 +3,9 @@ const IMAGE_DB_NAME = "time-options-images";
 const IMAGE_STORE = "images";
 const IMAGE_LIMIT = 4 * 1024 * 1024;
 const defaults = [
-  { title: "Summa Theologica", minutes: 15, energy: "gentle", prompt: "Read a little of the Summa Theologica.", tags: ["reading", "study"] },
-  { title: "Write an essay", minutes: 15, energy: "focused", choices: ["DSW", "AQ"], tags: ["writing", "study"] },
+  { title: "Write in a journal", minutes: 15, energy: "focused", choices: [], tags: ["writing", "study"] },
   { title: "Anki cards", minutes: 5, energy: "focused", prompt: "Review a few cards.", tags: ["study"] },
-  { title: "Favorite books", minutes: 15, energy: "gentle", choices: ["Current book", "A favorite to revisit"], tags: ["reading", "leisure"] },
+  { title: "Read a book", minutes: 15, energy: "gentle", choices: ["Current book", "A favorite to revisit"], tags: ["reading", "leisure"] },
   { title: "Take a walk", minutes: 15, energy: "gentle", tags: ["movement", "leisure"] },
   { title: "Rest", minutes: 5, energy: "gentle", tags: ["rest", "leisure"] }
 ];
