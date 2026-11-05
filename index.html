@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#f4f3ee">
+    <title>Time</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="toolbar" aria-label="Options">
+        <button id="edit-options" class="quiet-button" type="button">Edit</button>
+        <span class="toolbar-divider" aria-hidden="true"></span>
+        <button id="backup-options" class="quiet-button" type="button">Backup</button>
+        <button id="restore-options" class="quiet-button" type="button">Restore</button>
+        <input id="restore-file" type="file" accept="application/json,.json" hidden>
+      </header>
+
+      <section id="home-view" aria-label="Activities">
+        <div class="home-heading">
+          <button id="decide-button" class="decide-button" type="button">
+            <span aria-hidden="true">✳</span> Help me decide
+          </button>
+        </div>
+        <div id="activity-grid" class="activity-grid"></div>
+      </section>
+
+      <section id="guide-view" aria-label="Suggestion" hidden>
+        <button id="back-button" class="back-button" type="button">← All options</button>
+        <div class="filter-panel">
+          <div class="filter-row">
+            <span class="filter-caption">Time</span>
+            <div class="time-options" role="group" aria-label="Available time">
+              <button class="time-option" type="button" data-minutes="5" aria-pressed="false">5 min.</button>
+              <button class="time-option is-selected" type="button" data-minutes="15" aria-pressed="true">15 min.</button>
+              <button class="time-option" type="button" data-minutes="30" aria-pressed="false">30 min.</button>
+              <button id="gentle-option" class="time-option" type="button" aria-pressed="false">Gentle</button>
+            </div>
+          </div>
+          <div id="tag-filter" class="tag-filter" hidden>
+            <div class="filter-row tag-filter-row">
+              <span class="filter-caption">Tags</span>
+              <div id="tag-options" class="tag-options"></div>
+            </div>
+            <div id="tag-match" class="tag-match" hidden>
+              <button class="match-option is-selected" type="button" data-match="OR" aria-pressed="true">OR</button>
+              <button class="match-option" type="button" data-match="AND" aria-pressed="false">AND</button>
+            </div>
+          </div>
+        </div>
+        <article class="suggestion" aria-live="polite">
+          <div id="suggestion-image" class="suggestion-image" hidden></div>
+          <div class="suggestion-body">
+            <span id="activity-time" class="activity-time"></span>
+            <h1 id="activity-title"></h1>
+            <p id="activity-prompt"></p>
+            <div class="suggestion-actions">
+              <button id="begin-button" class="begin-button" type="button">Begin</button>
+              <button id="another-button" class="text-button" type="button">Another</button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <dialog id="options-dialog">
+      <div class="dialog-header">
+        <h1>Options</h1>
+        <button id="close-dialog" class="icon-button" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="editor-layout">
+        <div id="options-list" class="options-list"></div>
+        <form id="activity-form">
+          <h2 id="form-heading">Add option</h2>
+          <input id="activity-index" type="hidden">
+          <label class="field">
+            <span>Name</span>
+            <input id="form-title" name="title" required maxlength="80" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>Icon <span class="optional">optional · emoji or symbol</span></span>
+            <input id="form-icon" name="icon" maxlength="8" autocomplete="off">
+          </label>
+          <div class="form-pair">
+            <label class="field">
+              <span>Minutes</span>
+              <input id="form-minutes" name="minutes" type="number" min="1" max="1440" value="15" required inputmode="numeric">
+            </label>
+            <label class="field">
+              <span>Energy</span>
+              <select id="form-energy" name="energy">
+                <option value="any">Any</option>
+                <option value="gentle">Gentle</option>
+                <option value="focused">Focused</option>
+              </select>
+            </label>
+          </div>
+          <label class="field">
+            <span>Tags</span>
+            <input id="form-tags" name="tags" maxlength="160" placeholder="reading, study" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>Note <span class="optional">optional</span></span>
+            <input id="form-prompt" name="prompt" maxlength="180" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>Link <span class="optional">optional</span></span>
+            <input id="form-url" name="url" type="url" inputmode="url" placeholder="https://">
+          </label>
+          <label class="field">
+            <span>Picture URL <span class="optional">optional</span></span>
+            <input id="form-image-url" name="imageUrl" type="url" inputmode="url" placeholder="https://">
+          </label>
+          <div class="picture-picker">
+            <label class="upload-button" for="form-image-file">Choose picture</label>
+            <input id="form-image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden>
+            <span id="picture-name" class="picture-name">No picture chosen</span>
+            <button id="remove-picture" class="remove-picture" type="button" hidden>Remove</button>
+          </div>
+          <img id="image-preview" class="image-preview" alt="" hidden>
+          <label class="field">
+            <span>Choices <span class="optional">optional · one per line</span></span>
+            <textarea id="form-choices" name="choices" rows="2"></textarea>
+          </label>
+          <div class="form-actions">
+            <button id="cancel-edit" class="text-button" type="button" hidden>Cancel</button>
+            <button class="save-button" type="submit">Save option</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </body>
+</html>
