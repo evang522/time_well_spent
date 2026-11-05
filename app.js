@@ -513,6 +513,7 @@ formImageFile.addEventListener("change", () => {
 });
 formImageUrl.addEventListener("input", () => {
   if (formImageFile.files[0]) return;
+  currentImageId = "";
   setPicturePreview(formImageUrl.value.trim());
 });
 removePictureButton.addEventListener("click", () => {

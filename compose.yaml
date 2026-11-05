@@ -1,0 +1,18 @@
+services:
+  nginx:
+    build: .
+    image: timewellspent:latest
+    container_name: timewellspent-nginx
+    networks:
+      - traefik-public
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.timewellspent.rule=Host(`timewellspent.studium.life`)
+      - traefik.http.routers.timewellspent.entrypoints=websecure
+      - traefik.http.routers.timewellspent.tls.certresolver=letsencrypt
+      - traefik.http.services.timewellspent.loadbalancer.server.port=80
+
+networks:
+  traefik-public:
+    external: true
